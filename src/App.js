@@ -1,15 +1,15 @@
 import "./app.css";
-// import Typography from "@mui/material/Typography";
-// import Model from "./Model";
-// import { useEffect, useState } from "react";
-// import Card from "./Card";
 import { Button, TextField } from "@mui/material";
 import List from "./List";
 import Card from "./Card";
 import Model from "./Model";
 import { useEffect, useState } from "react";
-const task = JSON.parse(localStorage.getItem("chain"));
+
+const task = JSON.parse(localStorage.getItem("chain")); // It recures reload everytime
 function App() {
+  // const task = JSON.parse(localStorage.getItem("chain")); when i retrive data from local
+  //storange inside component in re-render infinit time, WHY ??
+
   const [list, setList] = useState([]);
   const renderCard = Array.from(Array(100)).map((_, i) => {
     return (
@@ -20,14 +20,14 @@ function App() {
   });
 
   useEffect(() => {
-    console.log(task);
     setList(task.weekTask);
+    console.log(task);
   }, [task]);
   return (
     <div className="app">
       <div className="typo">
         <h1 className="heading">Don't break the chain</h1>
-        <h2 className="goal">Achieve new goal</h2>
+        <h2 className="goal">{task.name}</h2>
       </div>
       <div className="week-goal">
         <span className="week-goal-heading">Week task</span>
@@ -35,17 +35,11 @@ function App() {
       </div>
       <div className="go">
         <span className="go-text">Go</span>
-        <span className="days">90 days</span>
-        {/* <Button
-          sx={{ padding: "1rem 4rem", marginTop: "1rem", fontSize: "large" }}
-          variant="contained"
-        >
-          Add note
-        </Button> */}
+        <span className="days"> 90 days left</span>
         <Model />
       </div>
       <div className="weekend-goal">
-        <span className="weekend-goal-heading">Week task</span>
+        <span className="weekend-goal-heading">Weekend task</span>
         <List task={list} day="weekend" />
       </div>
       <div className="grid">{renderCard}</div>

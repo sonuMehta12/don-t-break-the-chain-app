@@ -27,32 +27,31 @@ export default function CheckboxList({ day, task }) {
   const handleAddNote = () => {
     setShownote(false);
   };
-
   const bg = (el) => {
-    if (el.day === "week") {
-      return "blue";
-    } else if (el.day == "common") {
-      return "purple";
-    } else {
+    if (el === "week") {
+      return "#d03b3b";
+    } else if (el == "common") {
       return "black";
-    }
-  };
-  const renderTask = () => {
-    if (task === null) {
-      return <div>add fist...</div>;
     } else {
-      const weeks = task.filter((el) => {
-        return el.day != day;
-      });
-      return weeks.map((el) => {
-        return (
-          <li id={el.id} style={{ color: `${bg(el)}` }} className="list">
-            {el.task}
-          </li>
-        );
-      });
+      return "purple";
     }
   };
+  //   const renderTask = () => {
+  //     if (task === null) {
+  //       return <div>add fist...</div>;
+  //     } else {
+  //       const weeks = task.filter((el) => {
+  //         return el.day != day;
+  //       });
+  //       return weeks.map((el) => {
+  //         return (
+  //           <li id={el.id} style={{ color: `${bg(el)}` }} className="list">
+  //             {el.task}
+  //           </li>
+  //         );
+  //       });
+  //     }
+  //   };
 
   const renderNoteInput = () => {
     return (
@@ -78,56 +77,60 @@ export default function CheckboxList({ day, task }) {
   return (
     <List sx={{ width: "80%", color: "#ffff" }}>
       {shownote && renderNoteInput()}
-      {task.map((value) => {
-        const labelId = `checkbox-list-label-${value}`;
-
-        return (
-          <ListItem
-            key={value}
-            secondaryAction={
-              <IconButton
-                onClick={() => setShownote(!shownote)}
-                edge="end"
-                aria-label="comments"
-              >
-                <CommentIcon />
-              </IconButton>
-            }
-            disablePadding
-          >
-            <ListItemButton
-              role={undefined}
-              onClick={handleToggle(value)}
-              dense
-            >
-              <ListItemIcon>
-                <Checkbox
+      {task
+        .filter((el) => el.day != day)
+        .map((value) => {
+          const labelId = `checkbox-list-label-${value.id}`;
+          console.log(value.task);
+          return (
+            <ListItem
+              key={value.id}
+              secondaryAction={
+                <IconButton
+                  onClick={() => setShownote(!shownote)}
                   edge="end"
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{
-                    "aria-labelledby": labelId,
-                  }}
-                  style={{
-                    transform: "scale(2)",
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText
-                primaryTypographyProps={{
-                  fontSize: "2rem",
-                  letterSpacing: "2px",
-                }}
-                id={labelId}
-                // primary={`Line item ${value + 1}`}
+                  aria-label="comments"
+                >
+                  <CommentIcon />
+                </IconButton>
+              }
+              disablePadding
+            >
+              <ListItemButton
+                role={undefined}
+                onClick={handleToggle(value)}
+                dense
               >
-                <span>{renderTask()}</span>
-              </ListItemText>
-            </ListItemButton>
-          </ListItem>
-        );
-      })}
+                <ListItemIcon>
+                  <Checkbox
+                    edge="end"
+                    checked={checked.indexOf(value) !== -1}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{
+                      "aria-labelledby": labelId,
+                    }}
+                    style={{
+                      transform: "scale(2)",
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  primaryTypographyProps={{
+                    fontSize: "2rem",
+                    letterSpacing: "2px",
+                  }}
+                  id={labelId}
+                  // primary={`Line item ${value + 1}`}
+                >
+                  <span style={{ color: `${bg(value.day)}` }}>
+                    {value.task}
+                  </span>
+                </ListItemText>
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
     </List>
   );
 }
