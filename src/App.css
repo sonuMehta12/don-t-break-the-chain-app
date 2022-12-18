@@ -1,38 +1,114 @@
-.App {
+.app {
+  width: 90%;
+  height: 98vh;
+  margin: 0 auto;
+  background-image: linear-gradient(
+    to right top,
+    #d16ba5,
+    #c777b9,
+    #ba83ca,
+    #aa8fd8,
+    #9a9ae1,
+    #8aa7ec,
+    #79b3f4,
+    #69bff8,
+    #52cffe,
+    #41dfff,
+    #46eefa,
+    #5ffbf1
+  );
+  border-radius: 5px;
+  box-shadow: 5px 3px 10px #3333;
+  display: grid;
+  grid-template-rows: 10rem 1fr 3fr min-content;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.typo {
+  grid-row: 1/2;
+  grid-column: 2/3;
+  justify-self: center;
+  align-self: center;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.heading {
+  color: #fff;
+  font-weight: 900;
+  font-size: 4rem;
+  stroke: #41dfff;
+  -webkit-text-stroke: 1px rgb(35, 35, 174);
+  text-shadow: 1px 4px 5px rgba(113, 113, 113, 0.712);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.goal {
+  color: #f17f42;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.grid {
+  grid-row: 3/4;
+  grid-column: 1/-1;
+  width: 98%;
+  background-color: rgba(233, 236, 233, 0.356);
+  border-radius: 5px;
+  margin: 1%;
+  overflow: scroll;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 10rem);
+}
+
+.add-new {
+  grid-row: 4/-1;
+  grid-column: 1/-1;
+}
+
+.go {
+  grid-row: 2/3;
+  grid-column: 2/3;
+  justify-self: center;
+  align-self: flex-start;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  text-align: center;
+  margin-top: -1rem;
 }
 
-.App-link {
-  color: #61dafb;
+.go-text {
+  font-size: 8rem;
+  color: #ffeee4;
+  font-weight: 700;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.days {
+  font-size: 4rem;
+  color: #a19e9c;
+  font-weight: 800;
+}
+
+.week-goal {
+  grid-row: 2/3;
+  text-align: center;
+  margin-left: 10%;
+}
+
+.week-goal-heading {
+  font-size: 3rem;
+  font-weight: 500;
+  letter-spacing: 3px;
+  color: #b55cdf;
+}
+
+.weekend-goal-heading {
+  font-size: 3rem;
+  font-weight: 500;
+  color: #d03b3b;
+  letter-spacing: 3px;
+}
+
+.weekend-goal {
+  grid-row: 2/3;
+
+  text-align: center;
 }
