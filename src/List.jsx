@@ -82,7 +82,7 @@ export default function CheckboxList({ day, task, setNoCompleted, setNote }) {
     <List sx={{ width: "80%", color: "#ffff" }}>
       {shownote && renderNoteInput()}
       {task
-        .filter((el) => el.day != day)
+        .filter((el) => el.day === day || el.day === "common")
         .map((value) => {
           const labelId = `checkbox-list-label-${value.id}`;
           return (

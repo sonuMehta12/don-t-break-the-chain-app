@@ -8,7 +8,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useState } from "react";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-
+import Dialog from "./Dialog";
 const style = {
   position: "absolute",
   top: "50%",
@@ -36,6 +36,8 @@ export default function BasicModal() {
   const [task, setTask] = React.useState(chain.weekTask);
   const [goal, setGoal] = useState("");
   const [duration, setDuration] = useState("");
+  const [agree, setAgree] = useState(false);
+
   chain.name = goal;
   chain.duration = parseInt(duration);
 
@@ -61,9 +63,12 @@ export default function BasicModal() {
     setVal("");
   };
 
-  const addChain = () => {
+  const addChain = (agree) => {
+    console.log(agree);
     if (task && duration && goal) {
       localStorage.setItem("chain", JSON.stringify(chain));
+      localStorage.setItem("data", JSON.stringify([]));
+      localStorage.setItem("note", JSON.stringify([]));
     }
     handleClose();
   };
@@ -176,7 +181,6 @@ export default function BasicModal() {
               inputProps={{ style: { fontSize: "2rem" } }} // font size of input text
             />
           </div>
-
           <div style={{ margin: "1rem" }}>
             <TextField
               type="number"
@@ -188,7 +192,6 @@ export default function BasicModal() {
               sx={{ width: "30%" }}
             />
           </div>
-
           <div
             style={{
               width: "80%",
@@ -230,14 +233,18 @@ export default function BasicModal() {
               Add
             </Button>
           </div>
-          <Button
-            color="success"
-            sx={{ margin: "1rem auto", width: "50%" }}
-            variant="contained"
-            onClick={addChain}
-          >
-            All Done
-          </Button>
+          {agree ? (
+            <Button
+              color="success"
+              sx={{ margin: "1rem auto", width: "50%" }}
+              variant="contained"
+              onClick={addChain}
+            >
+              All Done
+            </Button>
+          ) : (
+            <Dialog setAgree={setAgree} />
+          )}
         </Box>
       </Modal>
     </div>
