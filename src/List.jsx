@@ -9,21 +9,24 @@ import IconButton from "@mui/material/IconButton";
 import CommentIcon from "@mui/icons-material/Comment";
 import { Button, TextField } from "@mui/material";
 
-export default function CheckboxList({ day, task }) {
-  const [checked, setChecked] = React.useState([0]);
+export default function CheckboxList({ day, task, setNoCompleted }) {
+  const [checked, setChecked] = React.useState([]);
   const [shownote, setShownote] = React.useState(false);
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
-
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
     setChecked(newChecked);
   };
+
+  React.useEffect(() => {
+    console.log(checked);
+    setNoCompleted(checked.length);
+  }, [checked]);
   const handleAddNote = () => {
     setShownote(false);
   };
@@ -36,22 +39,6 @@ export default function CheckboxList({ day, task }) {
       return "purple";
     }
   };
-  //   const renderTask = () => {
-  //     if (task === null) {
-  //       return <div>add fist...</div>;
-  //     } else {
-  //       const weeks = task.filter((el) => {
-  //         return el.day != day;
-  //       });
-  //       return weeks.map((el) => {
-  //         return (
-  //           <li id={el.id} style={{ color: `${bg(el)}` }} className="list">
-  //             {el.task}
-  //           </li>
-  //         );
-  //       });
-  //     }
-  //   };
 
   const renderNoteInput = () => {
     return (
@@ -81,7 +68,6 @@ export default function CheckboxList({ day, task }) {
         .filter((el) => el.day != day)
         .map((value) => {
           const labelId = `checkbox-list-label-${value.id}`;
-          console.log(value.task);
           return (
             <ListItem
               key={value.id}

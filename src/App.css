@@ -37,12 +37,13 @@
   font-weight: 900;
   font-size: 4rem;
   stroke: #41dfff;
+  margin-bottom: -2rem;
   -webkit-text-stroke: 1px rgb(35, 35, 174);
   text-shadow: 1px 4px 5px rgba(113, 113, 113, 0.712);
 }
 
 .goal {
-  color: #f17f42;
+  color: #4e42f1;
   font-size: 2.5rem;
   letter-spacing: 2px;
 }

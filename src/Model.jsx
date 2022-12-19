@@ -7,6 +7,7 @@ import { duration, TextField } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useState } from "react";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 const style = {
   position: "absolute",
@@ -24,6 +25,7 @@ let i = 0;
 const chain = {
   name: "",
   duration: 0,
+  date: new Date().toLocaleDateString(),
   weekTask: [],
 };
 
@@ -33,7 +35,7 @@ export default function BasicModal() {
   const [alignment, setAlignment] = React.useState("week");
   const [task, setTask] = React.useState(chain.weekTask);
   const [goal, setGoal] = useState("");
-  const [duration, setDuration] = useState("");
+  const [duration, setDuration] = useState(null);
   chain.name = goal;
   chain.duration = duration;
 
@@ -49,16 +51,20 @@ export default function BasicModal() {
   };
 
   const addTask = (val) => {
+    if (val == "") return;
     task.push({
       id: i++,
       task: val,
       day: alignment,
+      done: false,
     });
     setVal("");
   };
 
   const addChain = () => {
-    localStorage.setItem("chain", JSON.stringify(chain));
+    if (task && duration && goal) {
+      localStorage.setItem("chain", JSON.stringify(chain));
+    }
     handleClose();
   };
 
@@ -82,12 +88,17 @@ export default function BasicModal() {
             borderRadius: "5px",
             padding: "1rem 2rem",
             display: "inline-block",
+            fontSize: "1.6rem",
           }}
           variant="h5"
         >
           {el.task}
         </Typography>
-        <Button onClick={() => handleDelete(el)} color="error">
+        <Button
+          sx={{ fontSize: "1.6rem" }}
+          onClick={() => handleDelete(el)}
+          color="error"
+        >
           Delete
         </Button>
       </div>
@@ -123,12 +134,16 @@ export default function BasicModal() {
             id="modal-modal-description"
             sx={{
               mt: 2,
-              backgroundColor: "coral",
+              backgroundColor: "pink",
               padding: "1rem",
               marginBottom: "1rem",
             }}
           >
-            Warning ! You will lose your current chain when you add new
+            <WarningAmberIcon fontSize="large" color="error" />
+            Warning ! You will lose your current chain when you add new !{" "}
+            <span style={{ color: "#ffff" }}>
+              Do a full reload to see updated data
+            </span>
           </Typography>
           <div>
             <Typography
@@ -157,6 +172,8 @@ export default function BasicModal() {
               value={goal}
               label="What's your goal name"
               sx={{ width: "80%" }}
+              InputLabelProps={{ style: { fontSize: "2rem" } }}
+              inputProps={{ style: { fontSize: "2rem" } }} // font size of input text
             />
           </div>
 
@@ -165,7 +182,9 @@ export default function BasicModal() {
               type="number"
               onChange={(e) => setDuration(e.target.value)}
               value={duration}
-              label="How long you want to keep this chain"
+              label="Duration"
+              InputLabelProps={{ style: { fontSize: "2rem" } }}
+              inputProps={{ style: { fontSize: "2rem" } }} // font size of input text
               sx={{ width: "30%" }}
             />
           </div>
@@ -184,13 +203,15 @@ export default function BasicModal() {
               <ToggleButton value="common">Every day</ToggleButton>
             </ToggleButtonGroup>
           </div>
-          <div style={{ marginTop: "1rem" }}>
+          <div style={{ marginTop: "1rem", display: "flex" }}>
             <TextField
               type="text"
               onChange={(e) => setVal(e.target.value)}
               value={val}
               label="Add a task"
               sx={{ width: "80%" }}
+              InputLabelProps={{ style: { fontSize: "2rem" } }}
+              inputProps={{ style: { fontSize: "2rem" } }} // font size of input text
             />
             <Button
               sx={{ marginLeft: "1rem" }}

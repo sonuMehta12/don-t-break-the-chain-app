@@ -8,37 +8,35 @@ import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-export default function SimplePaper({ ind = "", icon = null }) {
-  const [active, setActive] = React.useState(false);
+export default function SimplePaper({ ind = "", activeCard }) {
   const renderIcon = () => {
     const sx = (color) => {
       return {
         color,
         fontSize: "7rem",
-        margin: "1rem -1.6rem",
+        marginTop: "-1rem",
       };
     };
-    if (icon) {
-      return icon === "sucess" ? (
-        <CheckCircleIcon sx={sx("green")} />
-      ) : (
-        <CancelIcon />
-      );
-    } else {
-      return <HourglassTopIcon sx={sx("grey")} />;
-    }
+
+    if (activeCard.status === "success" && ind === activeCard.current)
+      return <CheckCircleIcon sx={sx("green")} />;
+    else if (activeCard.status === "failed" && ind === activeCard.current)
+      return <CancelIcon sx={sx("red")} />;
+    else return <HourglassTopIcon sx={sx("grey")} />;
   };
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setActive(!active);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    setActive(!active);
   };
+
+  // React.useEffect(()=>{
+
+  // }, [active])
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -56,8 +54,7 @@ export default function SimplePaper({ ind = "", icon = null }) {
     >
       <Paper
         sx={{
-          border: `${active && "2px solid blue"}`,
-          display: "flex",
+          border: `${ind === activeCard.current && "4px solid gold"}`,
         }}
         aria-describedby={id}
         onClick={handleClick}
@@ -65,13 +62,13 @@ export default function SimplePaper({ ind = "", icon = null }) {
       >
         <span
           style={{
-            fontSize: "5rem",
-            textAlign: "center",
+            fontSize: "2rem",
             fontWeight: 700,
+            padding: "1rem",
             color: "#D4DFE6",
           }}
         >
-          1
+          {ind}
         </span>
         {renderIcon()}
       </Paper>
@@ -96,40 +93,3 @@ export default function SimplePaper({ ind = "", icon = null }) {
     </Box>
   );
 }
-
-// import * as React from 'react';
-
-// export default function BasicPopover() {
-//   const [anchorEl, setAnchorEl] = React.useState(null);
-
-//   const handleClick = (event) => {
-//     setAnchorEl(event.currentTarget);
-//   };
-
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//   };
-
-//   const open = Boolean(anchorEl);
-//   const id = open ? 'simple-popover' : undefined;
-
-//   return (
-//     <div>
-//       <Button aria-describedby={id} variant="contained" onClick={handleClick}>
-//         Open Popover
-//       </Button>
-//   <Popover
-//     id={id}
-//     open={open}
-//     anchorEl={anchorEl}
-//     onClose={handleClose}
-//     anchorOrigin={{
-//       vertical: 'bottom',
-//       horizontal: 'left',
-//     }}
-//   >
-//     <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
-//   </Popover>
-//     </div>
-//   );
-// }
