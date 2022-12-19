@@ -3,8 +3,9 @@ import { Button, IconButton, TextField } from "@mui/material";
 import List from "./List";
 import Card from "./Card";
 import Model from "./Model";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
+
 const chain = {
   name: "You seeing sample data, add your chain click below",
   duration: 0,
@@ -30,12 +31,22 @@ const chain = {
   ],
 };
 
-const task = JSON.parse(localStorage.getItem("chain")); // It recures reload everytime
+const taskL = JSON.parse(localStorage.getItem("chain")); // It recures reload everytime
+const cardDate = JSON.stringify(localStorage.setItem("cardDate", []));
+// const cardDate = [
+// //   {
+// //     id: null,
+// //     stauts: "",
+// //     notes: [],
+// //   },
+// // ];
 
 function App() {
   // const task = JSON.parse(localStorage.getItem("chain")); when i retrive data from local
   //storange inside component in re-render infinit time, WHY ??
+  const [task, setTask] = useState(chain);
   const [noTask, setNoOfTask] = useState(0);
+
   const [list, setList] = useState(chain.weekTask);
   const [noComplete, setNoCompleted] = useState(0);
   const [done, setDone] = useState(false);
@@ -45,7 +56,9 @@ function App() {
   const [currentDayInChain, setCurrentDayInChain] = useState(null);
   const date = new Date();
   const day = date.getDay() < 5 ? "week" : "weekend";
+  const [note, setNote] = useState({});
   //find the current day as per userduration
+
   const timeLeft = () => {
     if (startDay && duration) {
       if (parseInt(startDay.slice(0, 2)) === date.getMonth() + 1) {
@@ -76,6 +89,7 @@ function App() {
     const active = {
       status: done ? "success" : "failed",
       current: currentDayInChain,
+      note,
     };
     return (
       ///we have to send the current card number + success or failed status
@@ -88,34 +102,43 @@ function App() {
   });
 
   const renderSampleCard = () => {
+    const active = {
+      status: done ? "success" : "failed",
+      current: currentDayInChain,
+      note,
+    };
     return (
       <>
-        <Card ind="1" icon="sucess" />
-        <Card ind="2" icon="failed" />
-        <Card ind="3" />
+        <Card ind="1" activeCard={active} />
+        <Card ind="2" activeCard={active} />
+        <Card ind="3" activeCard={active} />
       </>
     );
   };
 
   useEffect(() => {
+    setTask(taskL);
     if (task) {
       setList(task.weekTask);
+      console.log(task);
+
+      setNoOfTask(parseInt(task.duration));
+      const n = task.weekTask.filter((el) => {
+        return el.day === day || el.day === "common";
+      }).length;
+      console.log(n);
+      console.log(noComplete);
+      noComplete === n ? setDone(true) : setDone(false);
+
+      //filter out the day
+      setStartDay(task.date);
+      setDuration(task.duration);
+
+      timeLeft();
+      setCurrentDayInChain(duration - daysLeft + 1);
+      console.log(note);
     }
-    setNoOfTask(parseInt(task.duration));
-    const n = task.weekTask.filter((el) => {
-      return el.day === day || el.day === "common";
-    }).length;
-    console.log(n);
-    console.log(noComplete);
-    noComplete === n ? setDone(true) : setDone(false);
-
-    //filter out the day
-    setStartDay(task.date);
-    setDuration(task.duration);
-
-    timeLeft();
-    setCurrentDayInChain(duration - daysLeft + 1);
-  }, [task, noComplete, startDay, duration, currentDayInChain]);
+  }, [task, taskL, noComplete, startDay, duration, currentDayInChain, note]);
   return (
     <div className="app">
       <a
@@ -131,7 +154,12 @@ function App() {
       </div>
       <div className="week-goal">
         <span className="week-goal-heading">Week task</span>
-        <List setNoCompleted={setNoCompleted} task={list} day="weekend" />
+        <List
+          setNote={setNote}
+          setNoCompleted={setNoCompleted}
+          task={list}
+          day="weekend"
+        />
       </div>
       <div className="go">
         <span className="go-text">Go</span>
@@ -140,7 +168,12 @@ function App() {
       </div>
       <div className="weekend-goal">
         <span className="weekend-goal-heading">Weekend task</span>
-        <List setNoCompleted={setNoCompleted} task={list} day="week" />
+        <List
+          setNote={setNote}
+          setNoCompleted={setNoCompleted}
+          task={list}
+          day="week"
+        />
       </div>
       <div className="grid">{task ? renderCard : renderSampleCard()}</div>
       <div className="add-new">

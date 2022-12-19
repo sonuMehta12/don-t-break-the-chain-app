@@ -35,7 +35,7 @@ export default function BasicModal() {
   const [alignment, setAlignment] = React.useState("week");
   const [task, setTask] = React.useState(chain.weekTask);
   const [goal, setGoal] = useState("");
-  const [duration, setDuration] = useState(null);
+  const [duration, setDuration] = useState("");
   chain.name = goal;
   chain.duration = duration;
 
@@ -51,7 +51,7 @@ export default function BasicModal() {
   };
 
   const addTask = (val) => {
-    if (val == "") return;
+    if (val === "") return;
     task.push({
       id: i++,
       task: val,
@@ -105,7 +105,7 @@ export default function BasicModal() {
     );
   });
   return (
-    <div style={{ fontSize: "1.6rem" }}>
+    <div style={{ height: "90%", overflow: "scroll" }}>
       <Button
         sx={{ padding: "1rem 4rem", marginTop: "1rem", fontSize: "large" }}
         variant="contained"
@@ -189,7 +189,16 @@ export default function BasicModal() {
             />
           </div>
 
-          <div>{renderTask}</div>
+          <div
+            style={{
+              width: "80%",
+              overflow: "auto",
+              display: "flex",
+              flexWrap: "wrap",
+            }}
+          >
+            {renderTask}
+          </div>
           <div>
             <ToggleButtonGroup
               color="primary"

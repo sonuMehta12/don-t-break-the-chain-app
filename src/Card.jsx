@@ -34,9 +34,12 @@ export default function SimplePaper({ ind = "", activeCard }) {
     setAnchorEl(null);
   };
 
-  // React.useEffect(()=>{
-
-  // }, [active])
+  // React.useEffect(() => {
+  //   const data = {
+  //     status: activeCard.status,
+  //     // notes: note,
+  //   };
+  // }, [active]);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;

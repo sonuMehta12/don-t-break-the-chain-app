@@ -8,10 +8,12 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import CommentIcon from "@mui/icons-material/Comment";
 import { Button, TextField } from "@mui/material";
-
-export default function CheckboxList({ day, task, setNoCompleted }) {
+import { noteContext } from "./context";
+export default function CheckboxList({ day, task, setNoCompleted, setNote }) {
   const [checked, setChecked] = React.useState([]);
   const [shownote, setShownote] = React.useState(false);
+  const [note, setNoteL] = React.useState("");
+  const [currentIndex, setCurrentInd] = React.useState(null);
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -27,9 +29,22 @@ export default function CheckboxList({ day, task, setNoCompleted }) {
     console.log(checked);
     setNoCompleted(checked.length);
   }, [checked]);
+
+  const handleInputButton = (ind) => {
+    setShownote(!shownote);
+    setCurrentInd(ind);
+  };
   const handleAddNote = () => {
+    const d = {
+      //insert data for notes with index
+      note,
+      ind: currentIndex,
+    };
+    setNote(d);
+    setNoteL("");
     setShownote(false);
   };
+
   const bg = (el) => {
     if (el === "week") {
       return "#d03b3b";
@@ -50,6 +65,8 @@ export default function CheckboxList({ day, task, setNoCompleted }) {
           maxRows={4}
           variant="filled"
           label="keep a note"
+          value={note}
+          onChange={(e) => setNoteL(e.target.value)}
         />
         <Button
           onClick={handleAddNote}
@@ -73,7 +90,7 @@ export default function CheckboxList({ day, task, setNoCompleted }) {
               key={value.id}
               secondaryAction={
                 <IconButton
-                  onClick={() => setShownote(!shownote)}
+                  onClick={() => handleInputButton(value.id)}
                   edge="end"
                   aria-label="comments"
                 >
