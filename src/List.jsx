@@ -26,7 +26,7 @@ export default function CheckboxList({ day, task, setNoCompleted, setNote }) {
   };
 
   React.useEffect(() => {
-    console.log(checked);
+    // console.log(checked);
     setNoCompleted(checked.length);
   }, [checked]);
 

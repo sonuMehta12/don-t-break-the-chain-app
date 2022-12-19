@@ -6,6 +6,8 @@ import Model from "./Model";
 import { useEffect, useState, useContext } from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
+import { cardData, noteData } from "./data";
+
 const chain = {
   name: "You seeing sample data, add your chain click below",
   duration: 0,
@@ -32,18 +34,42 @@ const chain = {
 };
 
 const taskL = JSON.parse(localStorage.getItem("chain")); // It recures reload everytime
-const cardDate = JSON.stringify(localStorage.setItem("cardDate", []));
+
+// localStorage.setItem("cardData", JSON.stringify([]));
+// localStorage.setItem("cardNote", JSON.stringify([]));
+
+// const fetchCardNote = JSON.parse(localStorage.getItem("cardNote"));
+// const fetchCardData = JSON.parse(localStorage.getItem("cardData"));
+
+// const cardInitData = [
+// {
+//   id: 0,
+//   stauts: "pending",
+//   notes: [
+//     {
+//       note: "note",
+//       id: null,
+//     },
+//   ],
+// },
+// ];
 // const cardDate = [
-// //   {
-// //     id: null,
-// //     stauts: "",
-// //     notes: [],
-// //   },
-// // ];
+//   {
+//     id: null,
+//     stauts: "",
+//     notes: [
+//       {
+//         note: 'note',
+//         id: null
+//       }
+//     ],
+//   },
+// ];
 
 function App() {
   // const task = JSON.parse(localStorage.getItem("chain")); when i retrive data from local
   //storange inside component in re-render infinit time, WHY ??
+
   const [task, setTask] = useState(chain);
   const [noTask, setNoOfTask] = useState(0);
 
@@ -52,8 +78,9 @@ function App() {
   const [done, setDone] = useState(false);
   const [startDay, setStartDay] = useState(null);
   const [duration, setDuration] = useState(null);
-  const [daysLeft, setDaysLeft] = useState(duration);
+  const [daysLeft, setDaysLeft] = useState(null);
   const [currentDayInChain, setCurrentDayInChain] = useState(null);
+  // const [updatedCardData, setUpdatedCardData] = useState(fetchCardData);
   const date = new Date();
   const day = date.getDay() < 5 ? "week" : "weekend";
   const [note, setNote] = useState({});
@@ -66,6 +93,7 @@ function App() {
         setDaysLeft(
           duration - (date.getDate() - parseInt(startDay.slice(3, 5)))
         );
+        console.log(daysLeft, "dafdkjaksh");
       } else {
         ///find other logic to get no of remaining days
         // console.log(duration - )
@@ -83,9 +111,8 @@ function App() {
       return;
     }
   };
-
   const renderCard = Array.from(Array(noTask)).map((_, i) => {
-    console.log(done, "done");
+    // console.log(done, "done");
     const active = {
       status: done ? "success" : "failed",
       current: currentDayInChain,
@@ -116,29 +143,116 @@ function App() {
     );
   };
 
+  // const handleCardData = ()=> {
+
+  // }
+
+  // useEffect(() => {
+
+  //   // // console.log(fetchCardData && currentDayInChain && note);
+  //   // console.log(currentDayInChain);
+  //   // if (fetchCardData) {
+  //   //   const a = fetchCardData.push({
+  //   //     id: currentDayInChain,
+  //   //     status: done,
+  //   //     note: [],
+  //   //   });
+  //   //   localStorage.setItem("cardData", JSON.stringify(a));
+  //   //   console.log(a);
+  //   //   console.log(fetchCardData, "hiiihi");
+  //   // }
+
+  //   // const addDataToCardData = {
+  //   //   id: currentDayInChain,
+  //   //   status: done,
+  //   //   note:
+  //   // }
+  //   // fetchCardData[0].note.push(note);
+  // });
+
+  // useEffect(() => {
+  //   if (fetchCardData) {
+  //     if (currentDayInChain != null) {
+  //       const a = fetchCardData.push({
+  //         id: currentDayInChain,
+  //         status: done,
+  //       });
+  //       localStorage.setItem("cardData", JSON.stringify(a));
+  //     }
+
+  //     console.log(fetchCardData, "hiiihi");
+  //   }
+  // }, [currentDayInChain, done]);
+
+  // useEffect(() => {
+  //   if (fetchCardNote && Object.keys(note).length > 0 && note.note.length > 0) {
+  //     const b = fetchCardNote.push(note);
+  //     localStorage.setItem("cardNote", JSON.stringify(b));
+  //     console.log(fetchCardNote, "notesInside");
+  //   }
+  //   console.log(fetchCardNote, "notes");
+  //   console.log(fetchCardData, "dood ka dood");
+  // }, [note]);
+
   useEffect(() => {
+    console.log(currentDayInChain, "null");
+    if (currentDayInChain) {
+      const c = cardData.push({
+        id: currentDayInChain,
+        status: done,
+      });
+      console.log(cardData);
+    }
+  }, [currentDayInChain, done]);
+
+  useEffect(() => {
+    ///logic sor storing the note in local storage
+    // const cardInitData = [
+    //   {
+    //     id: currentDayInChain,
+    //     status: done,
+    //     note: [],
+    //   },
+    // ];
+    // const cardDate = localStorage.setItem(
+    //   "cardData",
+    //   JSON.stringify(cardInitData)
+    // );
+    // const fetchCardData = JSON.parse(localStorage.getItem("cardData"));
+
     setTask(taskL);
     if (task) {
       setList(task.weekTask);
-      console.log(task);
 
       setNoOfTask(parseInt(task.duration));
       const n = task.weekTask.filter((el) => {
         return el.day === day || el.day === "common";
       }).length;
-      console.log(n);
-      console.log(noComplete);
+      // console.log(n);
+      // console.log(noComplete);
       noComplete === n ? setDone(true) : setDone(false);
-
+      timeLeft();
       //filter out the day
       setStartDay(task.date);
-      setDuration(task.duration);
+      setDuration(parseInt(task.duration));
 
-      timeLeft();
-      setCurrentDayInChain(duration - daysLeft + 1);
-      console.log(note);
+      console.log(duration);
+      console.log(daysLeft);
+      daysLeft && setCurrentDayInChain(duration - daysLeft + 1);
+      console.log(currentDayInChain);
+
+      // console.log(note, "note");
     }
-  }, [task, taskL, noComplete, startDay, duration, currentDayInChain, note]);
+  }, [
+    task,
+    taskL,
+    noComplete,
+    startDay,
+    duration,
+    currentDayInChain,
+    note,
+    daysLeft,
+  ]);
   return (
     <div className="app">
       <a

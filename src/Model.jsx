@@ -37,7 +37,7 @@ export default function BasicModal() {
   const [goal, setGoal] = useState("");
   const [duration, setDuration] = useState("");
   chain.name = goal;
-  chain.duration = duration;
+  chain.duration = parseInt(duration);
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -105,7 +105,7 @@ export default function BasicModal() {
     );
   });
   return (
-    <div style={{ height: "90%", overflow: "scroll" }}>
+    <div style={{ height: "90%" }}>
       <Button
         sx={{ padding: "1rem 4rem", marginTop: "1rem", fontSize: "large" }}
         variant="contained"
