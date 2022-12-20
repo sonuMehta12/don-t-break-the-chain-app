@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import CommentIcon from "@mui/icons-material/Comment";
 import { Button, TextField } from "@mui/material";
 import { noteContext } from "./context";
+
 export default function CheckboxList({ day, task, setNoCompleted, setNote }) {
   const [checked, setChecked] = React.useState([]);
   const [shownote, setShownote] = React.useState(false);

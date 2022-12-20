@@ -18,7 +18,9 @@ export default function SimplePaper({ ind = "", activeCard, cardData }) {
         marginTop: "-1rem",
       };
     };
-
+    if (cardData) {
+      console.log(cardData.id);
+    }
     if (activeCard.status === "success" && ind === activeCard.current)
       return <CheckCircleIcon sx={sx("green")} />;
     else if (activeCard.status === "failed" && ind === activeCard.current)
@@ -109,16 +111,26 @@ export default function SimplePaper({ ind = "", activeCard, cardData }) {
       sx={{
         display: "flex",
         flexWrap: "wrap",
-        "& > :not(style)": {
-          m: 1,
-          width: "9rem",
-          height: "9rem",
-        },
+        margin: "1rem",
+        // "& > :not(style)": {
+        //   m: 1,
+        //   width: "100%",
+        //   height: "100%",
+        // },
       }}
     >
       <Paper
         sx={{
-          border: `${ind === activeCard.current && "4px solid gold"}`,
+          backgroundImage: `${
+            ind === activeCard.current &&
+            "linear-gradient(to left bottom, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1)"
+          }`,
+          border: `${ind === activeCard.current && "1px solid blue"}`,
+          "& > :not(style)": {
+            m: 1,
+            width: "100%",
+            height: "100%",
+          },
         }}
         aria-describedby={id}
         onClick={handleClick}
@@ -134,7 +146,7 @@ export default function SimplePaper({ ind = "", activeCard, cardData }) {
         >
           {ind}
         </span>
-        {renderIcon()}
+        <div>{renderIcon()}</div>
       </Paper>
       <Popover
         id={id}

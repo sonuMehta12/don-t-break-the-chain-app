@@ -19,13 +19,13 @@ const chain = {
     },
     {
       id: 1,
-      task: "I'm weekend gojsafkan task",
+      task: "I'm weekend  task",
       day: "weekend",
       status: "success",
     },
     {
       id: 2,
-      task: "I'm commmon task",
+      task: "I'm everyday task",
       day: "common",
       status: "pending",
     },
@@ -49,6 +49,7 @@ function App() {
   const [duration, setDuration] = useState(null);
   const [daysLeft, setDaysLeft] = useState(null);
   const [currentDayInChain, setCurrentDayInChain] = useState(null);
+  const [addExtraTask, setAddExtraTask] = useState("");
   // const [updatedCardData, setUpdatedCardData] = useState(fetchCardData);
   const date = new Date();
   const day = date.getDay() < 5 ? "week" : "weekend";
@@ -92,35 +93,36 @@ function App() {
     // const setItem = b ? b : ["hello"];
     // const a = localStorage.setItem("data", JSON.stringify(setItem));
     // console.log(a);
+    if (a && b) {
+      console.log(a, b);
+      const d = a.slice();
+      const x = b.slice();
+      console.log(note);
 
-    console.log(a, b);
-    const d = a.slice();
-    const x = b.slice();
-    console.log(note);
+      // console.log(Object.keys(note).length > 0 && Object.keys(note.note).length);
 
-    // console.log(Object.keys(note).length > 0 && Object.keys(note.note).length);
+      if (Object.keys(note).length > 0 && Object.keys(note.note).length) {
+        const mergesNote = x.concat(note);
+        localStorage.setItem("note", JSON.stringify(mergesNote));
+      }
+      //add card data
+      const g = JSON.parse(localStorage.getItem("note"));
+      // console.log(g, "note");
+      console.log(done, "done");
+      const cardData = {
+        id: currentDayInChain,
+        status: done,
+        notes: g,
+      };
 
-    if (Object.keys(note).length > 0 && Object.keys(note.note).length) {
-      const mergesNote = x.concat(note);
-      localStorage.setItem("note", JSON.stringify(mergesNote));
+      const mergesData = d.concat(cardData);
+      localStorage.setItem("card", JSON.stringify(mergesData));
+
+      const f = JSON.parse(localStorage.getItem("card"));
+      console.log(f, "data");
+
+      setNoteList(f);
     }
-    //add card data
-    const g = JSON.parse(localStorage.getItem("note"));
-    // console.log(g, "note");
-    console.log(done, "done");
-    const cardData = {
-      id: currentDayInChain,
-      status: done,
-      notes: g,
-    };
-
-    const mergesData = d.concat(cardData);
-    localStorage.setItem("card", JSON.stringify(mergesData));
-
-    const f = JSON.parse(localStorage.getItem("card"));
-    console.log(f, "data");
-
-    setNoteList(f);
   }, [currentDayInChain, done, note, localStorage]);
 
   useEffect(() => {
@@ -159,6 +161,20 @@ function App() {
     daysLeft,
   ]);
 
+  const addExtraTaskForDay = () => {
+    if (!addExtraTask) return;
+    // if (task) {
+    //   const copyTask = Object.entries(task)[3];
+    //   const taskToBeAdded = {
+    //     id: copyTask.length,
+    //     day: day,
+    //     task: addExtraTask,
+    //   };
+    //   copyTask.push(taskToBeAdded);
+    //   console.log(copyTask, "cosole.log");
+    // }
+  };
+
   const renderCard = Array.from(Array(noTask)).map((_, i) => {
     // console.log(done, "done");
     const active = {
@@ -167,6 +183,7 @@ function App() {
       note,
     };
     const toPassList = i < currentDayInChain ? notelist[i] : null;
+    // console.log(toPassList, "list");
     return (
       ///we have to send the current card number + success or failed status
       //we have to add one more obj in local storage to keep trak of chain
@@ -184,11 +201,11 @@ function App() {
       note,
     };
     return (
-      <>
+      <div>
         <Card ind="1" activeCard={active} />
         <Card ind="2" activeCard={active} />
         <Card ind="3" activeCard={active} />
-      </>
+      </div>
     );
   };
 
@@ -207,13 +224,31 @@ function App() {
       </div>
       <div className="week-goal">
         <span className="week-goal-heading">Week task</span>
-        <List
+        {/* <List
           setNote={setNote}
           setNoCompleted={setNoCompleted}
           task={list}
           day="weekend"
           cardData={notelist}
-        />
+        /> */}
+        {day === "week" ? (
+          <List
+            setNote={setNote}
+            setNoCompleted={setNoCompleted}
+            task={list}
+            day="weekend"
+          />
+        ) : (
+          <div className="list-box">
+            <div className="hidden"></div>
+            <List
+              setNote={setNote}
+              setNoCompleted={setNoCompleted}
+              task={list}
+              day="week"
+            />
+          </div>
+        )}
       </div>
       <div className="go">
         <span className="go-text">Go</span>
@@ -222,27 +257,42 @@ function App() {
       </div>
       <div className="weekend-goal">
         <span className="weekend-goal-heading">Weekend task</span>
-        <List
-          setNote={setNote}
-          setNoCompleted={setNoCompleted}
-          task={list}
-          day="week"
-        />
+        {day === "weekend" ? (
+          <List
+            setNote={setNote}
+            setNoCompleted={setNoCompleted}
+            task={list}
+            day="week"
+          />
+        ) : (
+          <div className="list-box">
+            <div className="hidden"></div>
+            <List
+              setNote={setNote}
+              setNoCompleted={setNoCompleted}
+              task={list}
+              day="week"
+            />
+          </div>
+        )}
       </div>
       <div className="grid">{task ? renderCard : renderSampleCard()}</div>
       <div className="add-new">
         <TextField
           sx={{ width: "80%", margin: "1rem 1rem 1rem 5%", fontSize: "2rem" }}
           id="outlined-basic"
-          label="Add new task"
+          label="Any extra task you want to do today 📝 😉"
           color="primary"
-          variant="outlined"
+          variant="standard"
+          value={addExtraTask}
+          onChange={(e) => setAddExtraTask(e.target.value)}
           InputLabelProps={{ style: { fontSize: "2rem" } }}
           inputProps={{ style: { fontSize: "2rem" } }} // font size of input text
         />
 
         <Button
-          sx={{ fontSize: "2rem", padding: "2rem 3rem", marginTop: ".7rem" }}
+          sx={{ fontSize: "2rem", padding: "1rem 3rem", marginTop: ".7rem" }}
+          onClick={addExtraTaskForDay}
           variant="contained"
         >
           Add new

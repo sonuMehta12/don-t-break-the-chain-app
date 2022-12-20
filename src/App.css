@@ -114,3 +114,18 @@
 
   text-align: center;
 }
+
+.list-box {
+  position: relative;
+}
+.hidden {
+  position: absolute;
+  background-color: rgba(237, 234, 234, 0.404);
+  top: 50%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+
+  height: 100%;
+  z-index: 99;
+}
