@@ -5,7 +5,7 @@ import Card from "./Card";
 import Model from "./Model";
 import { useEffect, useState, useContext } from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import { cardData, noteData } from "./data";
+// import { cardData, noteData } from "./data";
 
 const chain = {
   name: "You seeing sample data, add your chain click below",
@@ -33,7 +33,7 @@ const chain = {
 };
 
 const taskL = JSON.parse(localStorage.getItem("chain")); // It recures reload everytime
-const a = JSON.parse(localStorage.getItem("data"));
+// const a = JSON.parse(localStorage.getItem("data"));
 // const b = JSON.parse(localStorage.getItem("note"));
 
 // console.log(b);
@@ -53,8 +53,11 @@ function App() {
   const date = new Date();
   const day = date.getDay() < 5 ? "week" : "weekend";
   const [note, setNote] = useState({});
+  const [notelist, setNoteList] = useState([]);
+
   //find the current day as per userduration
   const b = JSON.parse(localStorage.getItem("note"));
+  const a = JSON.parse(localStorage.getItem("data"));
 
   const timeLeft = () => {
     if (startDay && duration) {
@@ -80,47 +83,10 @@ function App() {
       return;
     }
   };
-  const renderCard = Array.from(Array(noTask)).map((_, i) => {
-    // console.log(done, "done");
-    const active = {
-      status: done ? "success" : "failed",
-      current: currentDayInChain,
-      note,
-    };
-    return (
-      ///we have to send the current card number + success or failed status
-      //we have to add one more obj in local storage to keep trak of chain
-
-      <div key={i}>
-        <Card ind={i + 1} activeCard={active} />
-      </div>
-    );
-  });
-
-  const renderSampleCard = () => {
-    const active = {
-      status: done ? "success" : "failed",
-      current: currentDayInChain,
-      note,
-    };
-    return (
-      <>
-        <Card ind="1" activeCard={active} />
-        <Card ind="2" activeCard={active} />
-        <Card ind="3" activeCard={active} />
-      </>
-    );
-  };
 
   useEffect(() => {
     // console.log(currentDayInChain, "null");
-    // if (currentDayInChain) {
-    //   const c = cardData.push({
-    //     id: currentDayInChain,
-    //     status: done,
-    //   });
-    //   console.log(cardData);
-    // }
+
     // localStorage.getItem("");
     // const b = JSON.parse(localStorage.getItem("data"));
     // const setItem = b ? b : ["hello"];
@@ -131,19 +97,31 @@ function App() {
     const d = a.slice();
     const x = b.slice();
     console.log(note);
+
     // console.log(Object.keys(note).length > 0 && Object.keys(note.note).length);
 
     if (Object.keys(note).length > 0 && Object.keys(note.note).length) {
       const mergesNote = x.concat(note);
       localStorage.setItem("note", JSON.stringify(mergesNote));
     }
-    const mergesData = d.concat("hi ther"); //add card data
-    localStorage.setItem("card", JSON.stringify(mergesData));
-    const f = JSON.parse(localStorage.getItem("card"));
+    //add card data
     const g = JSON.parse(localStorage.getItem("note"));
+    // console.log(g, "note");
+    console.log(done, "done");
+    const cardData = {
+      id: currentDayInChain,
+      status: done,
+      notes: g,
+    };
+
+    const mergesData = d.concat(cardData);
+    localStorage.setItem("card", JSON.stringify(mergesData));
+
+    const f = JSON.parse(localStorage.getItem("card"));
     console.log(f, "data");
-    console.log(g, "note");
-  }, [currentDayInChain, done, cardData, note, localStorage]);
+
+    setNoteList(f);
+  }, [currentDayInChain, done, note, localStorage]);
 
   useEffect(() => {
     setTask(taskL);
@@ -151,10 +129,11 @@ function App() {
       setList(task.weekTask);
 
       setNoOfTask(parseInt(task.duration));
+      ///logic for don or undone
       const n = task.weekTask.filter((el) => {
-        return el.day === day || el.day === "common";
+        return el.day != day || el.day === "common";
       }).length;
-      // console.log(n);
+      console.log(n);
       // console.log(noComplete);
       noComplete === n ? setDone(true) : setDone(false);
       timeLeft();
@@ -179,6 +158,40 @@ function App() {
     note,
     daysLeft,
   ]);
+
+  const renderCard = Array.from(Array(noTask)).map((_, i) => {
+    // console.log(done, "done");
+    const active = {
+      status: done ? "success" : "failed",
+      current: currentDayInChain,
+      note,
+    };
+    const toPassList = i < currentDayInChain ? notelist[i] : null;
+    return (
+      ///we have to send the current card number + success or failed status
+      //we have to add one more obj in local storage to keep trak of chain
+
+      <div key={i}>
+        <Card cardData={toPassList} ind={i + 1} activeCard={active} />
+      </div>
+    );
+  });
+
+  const renderSampleCard = () => {
+    const active = {
+      status: done ? "success" : "failed",
+      current: currentDayInChain,
+      note,
+    };
+    return (
+      <>
+        <Card ind="1" activeCard={active} />
+        <Card ind="2" activeCard={active} />
+        <Card ind="3" activeCard={active} />
+      </>
+    );
+  };
+
   return (
     <div className="app">
       <a
@@ -199,6 +212,7 @@ function App() {
           setNoCompleted={setNoCompleted}
           task={list}
           day="weekend"
+          cardData={notelist}
         />
       </div>
       <div className="go">

@@ -8,7 +8,8 @@ import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-export default function SimplePaper({ ind = "", activeCard }) {
+// const cardData = JSON.parse(localStorage.getItem("card"));
+export default function SimplePaper({ ind = "", activeCard, cardData }) {
   const renderIcon = () => {
     const sx = (color) => {
       return {
@@ -34,12 +35,72 @@ export default function SimplePaper({ ind = "", activeCard }) {
     setAnchorEl(null);
   };
 
-  // React.useEffect(() => {
-  //   const data = {
-  //     status: activeCard.status,
-  //     // notes: note,
-  //   };
-  // }, [active]);
+  const renderList = () => {
+    if (!cardData) return;
+    console.log(cardData);
+    // console.log(cardData[0].status);
+    console.log(cardData.notes);
+    const color = (id) => {
+      if (id === 0) {
+        return "#2b90d9";
+      } else if (id === 1) {
+        return "#282c37";
+      } else if (id === 2) {
+        return "#9baec8";
+      } else if (id === 3) {
+        return "#3ffc952";
+      } else if (id === 4) {
+        return "#5c196b";
+      } else if (id === 5) {
+        return "#ff5f2e";
+      } else if (id === 6) {
+        return "#181842";
+      } else if (id === 7) {
+        return "#DC143C";
+      } else if (id === 8) {
+        return "#9400D3";
+      } else if (id === 9) {
+        return "#1E90FF";
+      } else if (id === 5) {
+        return "#3333";
+      }
+    };
+    let uniqueList = [...new Set(cardData.notes)];
+
+    return [...uniqueList].map((el) => {
+      return (
+        <span
+          style={{
+            display: "block",
+            fontWeight: "bold",
+            textTransform: "capitalize",
+            color: `${color(el.ind)}`,
+          }}
+          id={el.ind}
+        >
+          {" "}
+          {el.ind} {el.note}
+        </span>
+      );
+    });
+    // if (cardData.note.length < 0) {
+    //   return null;
+    // } else {
+    //   return cardData.note.map((el) => {
+    //     return (
+    //       <span id={el.ind}>
+    //         {" "}
+    //         NOTE {el.id} {el.note}
+    //       </span>
+    //     );
+    //   });
+    // }
+  };
+
+  React.useEffect(() => {
+    // const c = JSON.parse(localStorage.getItem("card"));
+    // console.log(c);
+  });
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -87,10 +148,7 @@ export default function SimplePaper({ ind = "", activeCard }) {
         }}
       >
         <Typography sx={{ p: 2, fontSize: "1.6rem" }}>
-          The content of the Popove r. Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Magni ex iste facere, impedit illo, tenetur dolorem,
-          sunt architecto quisquam officia libero sit sapiente voluptate ea.
-          Dolorum earum pariatur in corporis!
+          {renderList()}
         </Typography>
       </Popover>
     </Box>
